@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Create Notes for Sanjay</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:panelGrid columns="3">
+                <h:outputText value="Hello #{request.getSession(false).getValue('username')}"/>
+                <h:outputText value="Role: DEFAULT" rendered="#{request.isUserInRole('DEFAULT')}"/>
+                <h:commandLink value="Logout" action="#{usersView.logout()}"/>
+            </h:panelGrid>
+            <h2>Create Note</h2>
+            <h:panelGrid columns="2">
+                <h:outputText value="Title:"/> 
+                <h:inputText value="#{notesView.title}"/>
+                <h:outputText value="Category:"/> 
+                <h:selectOneMenu value="#{notesView.category}">
+                    <f:selectItem itemValue="Social" itemLabel="Social" />
+                    <f:selectItem itemValue="ForSale" itemLabel="For Sale" />
+                    <f:selectItem itemValue="Jobs" itemLabel="Jobs" />
+                    <f:selectItem itemValue="Tution" itemLabel="Tution" />
+                </h:selectOneMenu>
+                <h:outputText value="Description:"/> 
+                <h:inputText value="#{notesView.description}"/>
+                <h:commandLink value="Back" action="notesmenu"/>
+                <h:commandButton value="Create Note" action="#{notesView.add()}"/>
+            </h:panelGrid>
+        </h:form>
+    </h:body>
+</html>
+
