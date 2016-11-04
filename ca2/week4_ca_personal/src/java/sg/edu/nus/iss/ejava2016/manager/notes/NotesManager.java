@@ -45,4 +45,12 @@ public class NotesManager {
         return (Optional.ofNullable(query.getResultList()));       
     }
     
+    public Optional<List<Notes>> findByCategory(String category){
+        TypedQuery<Notes> query = em.createNamedQuery(
+                "Notes.findByCategory", Notes.class);
+        query.setParameter("category", category);
+        
+        return (Optional.ofNullable(query.getResultList()));       
+    }
+    
 }

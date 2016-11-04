@@ -7,6 +7,8 @@ package sg.edu.nus.iss.ejava2016.model.notes;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -144,5 +146,15 @@ public class Notes implements Serializable {
     public String toString() {
         return "sg.edu.nus.iss.ejava2016.model.notes.Notes[ notesPK=" + notesPK + " ]";
     }
+    
+    public JsonObject toJSON() {
+            return (Json.createObjectBuilder()
+                .add("Title", title)
+                .add("Posted", created.toString())
+                .add("User", notesPK.getUserid())
+                .add("Category", category)
+                .add("Description", description)
+                .build());
+	}
     
 }

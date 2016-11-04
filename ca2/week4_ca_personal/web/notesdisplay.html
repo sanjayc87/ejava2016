@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Notes Display</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <!-- load libs -->
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+        <script src="bower_components/jQuery/dist/jquery.min.js"></script>
+        <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        
+        <!-- load app -->
+        <script src="notesdisplay.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Notes</h1>
+            <form>
+                <div class="form-group">
+                    <label for="message">Category:</label>
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <button class="btn btn-warning" 
+                                    type="button" 
+                                    id="sendBtnAll" 
+                                    value="All"/>
+                                    All
+                            </button>
+                            <button class="btn btn-warning" 
+                                    type="button" 
+                                    id="sendBtnSocial"  
+                                    value="Social"/>
+                                    Social
+                            </button>
+                            <button class="btn btn-warning" 
+                                    type="button" 
+                                    id="sendBtnForSale"  
+                                    value="ForSale"/>
+                                    For Sale
+                            </button>
+                            <button class="btn btn-warning" 
+                                    type="button" 
+                                    id="sendBtnJobs"  
+                                    value="Jobs">
+                                    Jobs
+                            </button>
+                            <button class="btn btn-warning" 
+                                    type="button" 
+                                    id="sendBtnTution"  
+                                    value="Tution"/>
+                                    Tuition
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                        <label for="tablearea">Notes:</label>
+                        <table class="table" id="tablearea" border="1"></table>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
