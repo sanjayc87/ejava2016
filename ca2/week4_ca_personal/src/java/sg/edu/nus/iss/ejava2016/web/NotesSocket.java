@@ -68,8 +68,8 @@ public class NotesSocket {
                                     case "Jobs":
                                         allNotes = notesManager.findByCategory("Jobs");
                                         break;
-                                    case "Tution":
-                                        allNotes = notesManager.findByCategory("Tution");
+                                    case "Tuition":
+                                        allNotes = notesManager.findByCategory("Tuition");
                                         break;
                                     default:
                                         allNotes = notesManager.findAll();

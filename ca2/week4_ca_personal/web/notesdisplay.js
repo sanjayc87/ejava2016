@@ -50,7 +50,7 @@ $(function() {
                 socket.send("Jobs");
         })
         $("#sendBtnTution").on("click", function() {
-                socket.send("Tution");
+                socket.send("Tuition");
         })
 
 	socket.onmessage = function(evt) {
