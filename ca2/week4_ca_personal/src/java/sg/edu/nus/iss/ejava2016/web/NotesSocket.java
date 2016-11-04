@@ -31,7 +31,7 @@ import sg.edu.nus.iss.ejava2016.model.notes.Notes;
  *
  * @author sanja
  */
-@ApplicationScoped
+@RequestScoped
 @ServerEndpoint("/notesdisplay")
 public class NotesSocket {
     
@@ -52,42 +52,36 @@ public class NotesSocket {
     
     @OnOpen
     public void open(Session session) {
-        System.out.println(">>> new session: " + session.getId());
         executor.scheduleAtFixedRate(new Runnable() {
 			@Override
 			public void run() {
-				System.out.println(">>> in thread");
                                 
                                 Optional<List<Notes>> allNotes = null;
                                 
                                 switch(type){
                                     case "Social":
                                         allNotes = notesManager.findByCategory("Social");
-                                        System.out.println(">>> in thread : Social");
                                         break;
                                     case "ForSale":
                                         allNotes = notesManager.findByCategory("ForSale");
-                                        System.out.println(">>> in thread : For Sale");
                                         break;
                                     case "Jobs":
                                         allNotes = notesManager.findByCategory("Jobs");
-                                        System.out.println(">>> in thread : Jobs");
                                         break;
                                     case "Tution":
                                         allNotes = notesManager.findByCategory("Tution");
-                                        System.out.println(">>> in thread : Tution");
                                         break;
                                     default:
                                         allNotes = notesManager.findAll();
-                                        System.out.println(">>> in thread : All");
                                         break;
                                 }
 
                                 JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
 
-                                allNotes.get().stream()
-                                        .map(c -> {return(c.toJSON());})
-                                        .forEach(j -> {arrBuilder.add(j);});
+                                List<Notes> sortedList = allNotes.get();
+                                sortedList.sort((n1,n2) -> n2.getCreated().compareTo(n1.getCreated()));
+                                sortedList.stream().map(c -> {return(c.toJSON());})
+                                    .forEach(j -> {arrBuilder.add(j);});
                                 
 				final JsonObject message = Json.createObjectBuilder()
 						.add("message", arrBuilder.build().toString())
@@ -108,7 +102,6 @@ public class NotesSocket {
     
     @OnMessage
     public void message(final Session session, final String msg) {
-            System.out.println(">>> message: " + msg);
             setType(msg);
 
 
