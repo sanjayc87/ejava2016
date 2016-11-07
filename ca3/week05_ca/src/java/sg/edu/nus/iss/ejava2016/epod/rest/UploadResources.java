@@ -5,10 +5,15 @@
  */
 package sg.edu.nus.iss.ejava2016.epod.rest;
 
+import com.sun.xml.ws.xmlfilter.Invocation;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Optional;
 import javax.ejb.EJB;
@@ -23,12 +28,19 @@ import javax.servlet.http.Part;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.MultiPart;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import sg.edu.nus.iss.ejava2016.epod.manager.PodManager;
 import sg.edu.nus.iss.ejava2016.epod.model.Pod;
 
@@ -78,17 +90,40 @@ public class UploadResources extends HttpServlet{
         return (buffer); 
     }
     
-    private void pushToHQ(Pod pod){
-        MultivaluedMap<String, String> form = new MultivaluedHashMap<>();
-        form.add("teamId", "cd485d72");
-        form.add("podId", pod.getPodId().toString());
-        form.add("note", pod.getNote());
-        form.add("image", pod.getImage().toString());
+    private void pushToHQ(Pod pod) throws IOException{
+        Client client = ClientBuilder.newBuilder()
+            .register(MultiPartFeature.class).build();
+        WebTarget webTarget = client.target("http://10.10.0.50:8080/epod/upload");
+        MultiPart multiPart = new MultiPart();
         
-        Response resp = ClientBuilder.newClient().target("http://10.10.0.50:8080/epod/upload")
+      
+        try {
+                 FileOutputStream fos = new FileOutputStream("\\week05_ca");
+                 String strContent = Arrays.toString(pod.getImage());
+
+                 fos.write(strContent.getBytes());
+                 fos.close();
+           }
+          catch(FileNotFoundException ex)   {
+                 System.out.println("FileNotFoundException : " + ex);
+         
+          }
+        
+        FormDataMultiPart formData=new FormDataMultiPart();
+                formData.field("teamId", "cd485d72")
+                .field("podId", pod.getPodId().toString())
+                .field("note", pod.getNote())
+                .field("callback","http://10.10.2.83:8080/week05_ca/callback");
+        multiPart.bodyPart(formData);
+        multiPart.bodyPart(new FileDataBodyPart("image","\\week05_ca.jpg"), MediaType.WILDCARD_TYPE);
+        
+        Invocation.Builder request = webTarget.request();
+        
+       /* Response resp = client.target("http://10.10.0.50:8080/epod/upload")
             .request(MediaType.APPLICATION_FORM_URLENCODED)
             .post(Entity.form(form), Response.class);
-        
+       */
+        Response resp=request.post(Entity.entity(multiPart, multiPart.getMediaType()));
         System.out.println("resp.getStatus()"+resp.getStatus());
     }
     
