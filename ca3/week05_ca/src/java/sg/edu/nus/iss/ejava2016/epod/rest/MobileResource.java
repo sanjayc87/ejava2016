@@ -24,7 +24,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import sg.edu.nus.iss.ejava2016.epod.business.DeliveryManager;
+import sg.edu.nus.iss.ejava2016.epod.manager.DeliveryManager;
+import sg.edu.nus.iss.ejava2016.epod.manager.PodManager;
 import sg.edu.nus.iss.ejava2016.epod.model.Delivery;
 import sg.edu.nus.iss.ejava2016.epod.model.Pod;
 
@@ -37,7 +38,7 @@ import sg.edu.nus.iss.ejava2016.epod.model.Pod;
 @Produces(MediaType.APPLICATION_JSON)
 public class MobileResource {
     
-    @EJB private DeliveryManager dliveryManager;
+    @EJB private PodManager podManager;
     
     @POST
     @Consumes("application/x-www-form-urlencoded") //?
@@ -57,33 +58,8 @@ public class MobileResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
-            
-            /*Delivery d = new Delivery();
-            d.setName("fred1");
-            d.setAddress("some where Bedrock");
-            d.setPhone("555-123451");
-            d.setCreateDate(new Date());
-            
-            
-            Pod p = new Pod();
-            p.setPkgId(d);
-            //d.setPodId(p);
-            
-            dliveryManager.add(d);
-            
-            Delivery d1 = new Delivery();
-            d1.setName("fred2");
-            d1.setAddress("some where Bedrock");
-            d1.setPhone("555-123452");
-            d1.setCreateDate(new Date());
-            
-            Pod p1 = new Pod();
-            p1.setPkgId(d1);
-            //d1.setPodId(p1);
-            
-            dliveryManager.add(d1);*/
         
-            Optional<List<Delivery>> opt = dliveryManager.getAll();
+            Optional<List<Pod>> opt = podManager.getAll();
             System.out.println(">> in getAll");
             if (!opt.isPresent())
                     return (Response
@@ -93,7 +69,7 @@ public class MobileResource {
             JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
         
             opt.get().stream()
-                    .map(c -> {return(c.toJSON());})
+                    .map(c -> {return(c.toDeliveryJSON());})
                     .forEach(j -> {arrBuilder.add(j);});
 
             return (Response.ok(arrBuilder.build()).build());

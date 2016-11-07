@@ -71,8 +71,6 @@ public class Delivery implements Serializable {
     @Column(name = "create_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pkgId")
-    private Collection<Pod> podCollection;
 
     public Delivery() {
     }
@@ -129,15 +127,6 @@ public class Delivery implements Serializable {
         this.createDate = createDate;
     }
 
-    @XmlTransient
-    public Collection<Pod> getPodCollection() {
-        return podCollection;
-    }
-
-    public void setPodCollection(Collection<Pod> podCollection) {
-        this.podCollection = podCollection;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -165,8 +154,6 @@ public class Delivery implements Serializable {
     
     public JsonObject toJSON() {
             return (Json.createObjectBuilder()
-                .add("teamId", "qwerty12345")
-                //.add("podId", podId.getPodId())
                 .add("name", name)
                 .add("address", address))
                 .add("phone", phone)

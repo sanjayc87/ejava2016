@@ -7,6 +7,8 @@ package sg.edu.nus.iss.ejava2016.epod.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +20,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -61,7 +64,7 @@ public class Pod implements Serializable {
     @Column(name = "ack_id", length = 16)
     private String ackId;
     @JoinColumn(name = "pkg_id", referencedColumnName = "pkg_id", nullable = false)
-    @ManyToOne(optional = false)
+    @OneToOne(optional = false)
     private Delivery pkgId;
 
     public Pod() {
@@ -148,5 +151,25 @@ public class Pod implements Serializable {
     public String toString() {
         return "sg.edu.nus.iss.ejava2016.epod.model.Pod[ podId=" + podId + " ]";
     }
+    
+    public JsonObject toDeliveryJSON() {
+            return (Json.createObjectBuilder()
+                .add("teamId", "1234567890")
+                .add("podId", podId)
+                .add("name", pkgId.getName())
+                .add("address", pkgId.getAddress())
+                .add("phone", pkgId.getPhone())
+                .build());
+	}
+    
+    /*public JsonObject toJSON() {
+            return (Json.createObjectBuilder()
+                .add("teamId", "1234567890")
+                .add("podId", podId)
+                .add("name", pkgId.getName())
+                .add("address", pkgId.getAddress())
+                .add("phone", pkgId.getPhone())
+                .build());
+	}*/
     
 }

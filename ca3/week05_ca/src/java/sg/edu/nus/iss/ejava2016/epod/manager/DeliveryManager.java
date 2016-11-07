@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sg.edu.nus.iss.ejava2016.epod.business;
+package sg.edu.nus.iss.ejava2016.epod.manager;
 
 import java.util.List;
 import java.util.Optional;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,8 +24,14 @@ public class DeliveryManager {
     
     @PersistenceContext private EntityManager em;
     
-    public void add(Delivery delivery){
+    public Integer add(Delivery delivery){
         em.persist(delivery);
+        em.flush();
+        return delivery.getPkgId();
+    }
+    
+    public Optional<Delivery> find(final Integer pkgId){
+        return(Optional.ofNullable(em.find(Delivery.class, pkgId)));
     }
     
     public Optional<List<Delivery>> getAll(){
