@@ -23,7 +23,10 @@ import javax.servlet.http.Part;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import sg.edu.nus.iss.ejava2016.epod.manager.PodManager;
@@ -57,6 +60,8 @@ public class UploadResources extends HttpServlet{
             pod.setDeliveryDate(new Date(time));
 
             podManager.update(pod);
+            
+            pushToHQ(pod);
         }
     }
     
@@ -71,6 +76,20 @@ public class UploadResources extends HttpServlet{
             } 
         }
         return (buffer); 
+    }
+    
+    private void pushToHQ(Pod pod){
+        MultivaluedMap<String, String> form = new MultivaluedHashMap<>();
+        form.add("teamId", "cd485d72");
+        form.add("podId", pod.getPodId().toString());
+        form.add("note", pod.getNote());
+        form.add("image", pod.getImage().toString());
+        
+        Response resp = ClientBuilder.newClient().target("http://10.10.0.50:8080/epod/upload")
+            .request(MediaType.APPLICATION_FORM_URLENCODED)
+            .post(Entity.form(form), Response.class);
+        
+        System.out.println("resp.getStatus()"+resp.getStatus());
     }
     
 }
