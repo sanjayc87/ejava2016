@@ -40,21 +40,6 @@ public class MobileResource {
     
     @EJB private PodManager podManager;
     
-    @POST
-    @Consumes("application/x-www-form-urlencoded") //?
-    public Response post(MultivaluedMap<String, String> formData) {
-
-            //req.getParameter("name")
-            System.out.println(">>> name: " + formData.getFirst("name"));
-            return (Response.ok().build());
-    }
-    
-    /*@GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getOne(@QueryParam("cid")Integer cid) {
-            return (get(cid));
-    }*/
-    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {

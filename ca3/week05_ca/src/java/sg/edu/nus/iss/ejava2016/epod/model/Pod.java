@@ -155,7 +155,7 @@ public class Pod implements Serializable {
     public JsonObject toDeliveryJSON() {
             return (Json.createObjectBuilder()
                 .add("teamId", "1234567890")
-                .add("podId", podId)
+                .add("podId", podId.longValue())
                 .add("name", pkgId.getName())
                 .add("address", pkgId.getAddress())
                 .add("phone", pkgId.getPhone())

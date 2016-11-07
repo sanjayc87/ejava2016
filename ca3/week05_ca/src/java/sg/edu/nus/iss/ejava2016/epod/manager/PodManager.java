@@ -30,7 +30,11 @@ public class PodManager {
         em.persist(pod);
     }
     
-    public Optional<Pod> find(final String pid){
+    public void update(Pod pod){
+        em.merge(pod);
+    }
+    
+    public Optional<Pod> find(final Integer pid){
         return(Optional.ofNullable(em.find(Pod.class, pid)));
     }
     
